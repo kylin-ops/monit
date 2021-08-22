@@ -1,0 +1,34 @@
+{
+  "http_server": {
+    "address": "0.0.0.0:8090",
+    "ngx_log_path": "/tmp/log",
+    "exclude_file": ".+\\.(js|css|html|ico)$"
+  },
+  "aliyun_sms": {
+    "region_id": "",
+    "access_key_id": "",
+    "access_key_secret": "",
+    "sign_name": "",
+    "template_code": "",
+    "phones": "13770519341,13874592241"
+  },
+  "logger": {
+    "level": "info",
+    "path": "/tmp/detector.log",
+    "roll_time": 24,
+    "roll_count": 5,
+    "is_console": true
+  },
+  "http_detectors": [
+    {
+      "url": "http://master.dev.kangyitong.cn:18081/uaa/oauth/token",
+      "username": "10000000000",
+      "password": "e10adc3949ba59abbe56e057f20f883e",
+      "interval": 300,
+      "failed_retry": 3,
+      "alert_pre_hour": 3,
+      "start_alert_time": "08:00:00",
+      "end_alert_time": "20:00:00"
+    }
+  ]
+}
