@@ -1,4 +1,15 @@
-# 1 使用数据
+# 1 编译
+```shell script
+go build main.go
+```
+
+# 2 启动服务
+```shell script
+nohup main &
+```
+
+# 3 配置说明
+配置文件与主程序在统一目录下
 ```json
 {
   # http服务配置
