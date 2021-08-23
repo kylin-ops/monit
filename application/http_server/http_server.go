@@ -2,7 +2,6 @@ package http_server
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
@@ -61,8 +60,8 @@ func (l *LogParser) NgxLogHandler(logPath, countType, excludeFile string) error 
 		if strings.Contains(line, "[error]") {
 			continue
 		}
-		fmt.Println(line)
 		ip, uri, accessTime, responseTime, err := lineParser(line)
+		uri = strings.Split(uri, "?")[0]
 		if err != nil {
 			continue
 		}
@@ -88,8 +87,6 @@ func (l *LogParser) NgxLogHandler(logPath, countType, excludeFile string) error 
 			break
 		}
 	}
-	d, _ := json.Marshal(l.UriAccessCount)
-	fmt.Println(string(d))
 	return nil
 }
 

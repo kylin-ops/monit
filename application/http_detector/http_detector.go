@@ -90,7 +90,6 @@ func (h *HttpDetector) HttpDetect() {
 			logger.Warnf(fmt.Sprintf("%s: 第%d探测失败,错误信息:%s, 等待3秒重试", h.Url, i, err.Error()))
 			time.Sleep(time.Second * 3)
 		}
-		fmt.Println(err)
 		if err != nil {
 			// 每小时告警重置
 			if hour != time.Now().Format("15") {
