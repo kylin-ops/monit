@@ -51,3 +51,17 @@ nohup main &
 
 }
 ```
+
+# 4 nginx日志统计使用
+```shell script
+1. 浏览器打开, 输入 http://ip:port
+url参数：
+    - stime:  2006-01-02T15:04:05  nginx日志开始时间
+    - etime:  2006-01-02T15:04:05  nginx日志结束时间
+    - type: uri|ip
+    没有参数时,默认参数: 
+        stime:24小时前, 
+        etime:当前时间,
+        type : uri
+示例: http://ip:port?stime=2021-08-20T01:00:01&etime=2021-08-21T01:00:01&type=uri
+```
