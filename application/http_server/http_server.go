@@ -2,21 +2,31 @@ package http_server
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
 
+type UrlCount struct {
+	Count           int
+	ResponseTime    float64
+	MaxResponseTime float64
+}
+
 type LogParser struct {
 	StartTime      time.Time
 	EndTime        time.Time
-	UriAccessCount map[string]int
+	UriAccessCount map[string]*UrlCount
 	IpAccessCount  map[string]int
 }
 
-func lineParser(line string) (ip, uri string, accessTime time.Time, err error) {
+func lineParser(line string) (ip, uri string, accessTime time.Time, responseTime float64, err error) {
+	reg := regexp.MustCompile("\\s+$")
+	line = reg.ReplaceAllString(line, "")
 	items := strings.Split(line, " ")
 	if len(items) > 7 {
 		ip = items[0]
@@ -24,8 +34,15 @@ func lineParser(line string) (ip, uri string, accessTime time.Time, err error) {
 		method := items[5][1:]
 		uri = method + ":" + uri
 		accessTime, err = time.Parse("[02/Jan/2006:15:04:05", items[3])
+		responseTime, _ = strconv.ParseFloat(items[len(items)-1], 64)
 	}
-	return ip, uri, accessTime, err
+	return ip, uri, accessTime, responseTime, err
+}
+
+func floatRound(f float64, n int) float64 {
+	format := "%." + strconv.Itoa(n) + "f"
+	res, _ := strconv.ParseFloat(fmt.Sprintf(format, f), 64)
+	return res
 }
 
 func (l *LogParser) NgxLogHandler(logPath, countType, excludeFile string) error {
@@ -41,34 +58,48 @@ func (l *LogParser) NgxLogHandler(logPath, countType, excludeFile string) error 
 		if err != nil {
 			break
 		}
-		ip, uri, accesstime, err := lineParser(line)
+		if strings.Contains(line, "[error]") {
+			continue
+		}
+		fmt.Println(line)
+		ip, uri, accessTime, responseTime, err := lineParser(line)
 		if err != nil {
 			continue
 		}
 		if rgx.MatchString(uri) {
 			continue
 		}
-		if accesstime.Before(l.EndTime) && accesstime.After(l.StartTime) {
+		if accessTime.Before(l.EndTime) && accessTime.After(l.StartTime) {
 			if countType == "url" {
-				l.UriAccessCount[uri] += 1
+				if _, ok := l.UriAccessCount[uri]; ok {
+					l.UriAccessCount[uri].Count += 1
+					l.UriAccessCount[uri].ResponseTime += responseTime
+					if l.UriAccessCount[uri].MaxResponseTime < responseTime {
+						l.UriAccessCount[uri].MaxResponseTime = responseTime
+					}
+				} else {
+					l.UriAccessCount[uri] = &UrlCount{}
+				}
 			} else if countType == "ip" {
 				l.IpAccessCount[ip] += 1
 			}
 		}
-		if accesstime.After(l.EndTime) {
+		if accessTime.After(l.EndTime) {
 			break
 		}
 	}
+	d, _ := json.Marshal(l.UriAccessCount)
+	fmt.Println(string(d))
 	return nil
 }
 
 func (l *LogParser) UrlLog(logPath string) (content string, err error) {
-	content = fmt.Sprintf("%-9s : %s\n", "URL", "访问次数")
+	content = fmt.Sprintf("%-9s : %-9s : %-9s : %s\n", "访问次数", "最大响应时间", "平均响应时间", "URL")
 	if err := l.NgxLogHandler(logPath, "url", httpConfig.ExcludeFile); err != nil {
 		return content, err
 	}
 	for k, v := range l.UriAccessCount {
-		content += fmt.Sprintf("%-9d : %s\n", v, k)
+		content += fmt.Sprintf("%-9d : %-9f : %-9f : %s\n", v.Count, v.MaxResponseTime, floatRound(v.ResponseTime/float64(v.Count), 4), k)
 	}
 	return content, nil
 }

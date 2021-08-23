@@ -10,7 +10,7 @@ import (
 var httpConfig = settings.Config.HttpServer
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
-	var logParser = LogParser{UriAccessCount: map[string]int{}, IpAccessCount: map[string]int{}}
+	var logParser = LogParser{UriAccessCount: map[string]*UrlCount{}, IpAccessCount: map[string]int{}}
 	query := r.URL.Query()
 	s, ok1 := query["stime"]
 	e, ok2 := query["etime"]
