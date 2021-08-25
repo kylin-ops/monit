@@ -25,15 +25,26 @@ type aliyunSms struct {
 	Phones          string `json:"phones"`
 }
 
+type Detectors struct {
+	Url    string `json:"url"`
+	Method string `json:"method"`
+}
+
+type Login struct {
+	Detectors
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Token    string `json:"token"`
+}
+
 type httpDetectors struct {
-	Url            string `json:"url"`
-	Username       string `json:"username"`
-	Password       string `json:"password"`
-	Interval       int    `json:"interval"`
-	FailedRetry    int    `json:"failed_retry"`
-	AlertPreHour   int    `json:"alert_pre_hour"`
-	StartAlertTime string `json:"start_alert_time"`
-	EndAlertTime   string `json:"end_alert_time"`
+	Interval       int       `json:"interval"`
+	FailedRetry    int       `json:"failed_retry"`
+	AlertPreHour   int       `json:"alert_pre_hour"`
+	StartAlertTime string    `json:"start_alert_time"`
+	EndAlertTime   string    `json:"end_alert_time"`
+	Login          Login     `json:"login"`
+	Detectors      Detectors `json:"detectors"`
 }
 
 type httpServer struct {

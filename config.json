@@ -19,16 +19,23 @@
     "roll_count": 5,
     "is_console": true
   },
-  "http_detectors": [
-    {
+  "http_detectors": {
+    "interval": 300,
+    "failed_retry": 3,
+    "alert_pre_hour": 3,
+    "start_alert_time": "08:00:00",
+    "end_alert_time": "20:00:00",
+    "login": {
       "url": "http://master.dev.kangyitong.cn:18081/uaa/oauth/token",
+      "method": "get",
       "username": "10000000000",
       "password": "e10adc3949ba59abbe56e057f20f883e",
-      "interval": 300,
-      "failed_retry": 3,
-      "alert_pre_hour": 3,
-      "start_alert_time": "08:00:00",
-      "end_alert_time": "20:00:00"
-    }
-  ]
+    },
+    "detectors": [
+      {
+        "url": "http://master.dev.kangyitong.cn:18081/uaa/oauth/token",
+        "method": "get"
+      }
+    ]
+  }
 }
