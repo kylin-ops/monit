@@ -20,7 +20,7 @@
     "is_console": true
   },
   "http_detectors": {
-    "interval": 10,
+    "interval": 30,
     "failed_retry": 3,
     "alert_pre_hour": 3,
     "start_alert_time": "08:00:00",
