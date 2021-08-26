@@ -156,11 +156,14 @@ func (h *HttpDetector) HttpDetect() {
 		for i := 1; i < h.FailedRetry+1; i++ {
 			err = h.HttpLogin()
 			if err != nil {
-				logger.Infof(fmt.Sprintf("%s: 第%d登录失败, %d秒后重试", h.Login.Url, i, h.FailedRetry))
+				logger.Error(fmt.Sprintf("%s: 第%d登录失败, %d秒后重试", h.Login.Url, i, h.FailedRetry))
 				time.Sleep(time.Duration(h.FailedRetry) * time.Second)
 				continue
 			}
 			break
+		}
+		if err != nil {
+			return
 		}
 
 		for _, addr := range h.Detectors {

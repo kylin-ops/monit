@@ -33,7 +33,7 @@
     },
     "detectors": [
       {
-        "url": "http://master.dev.kangyitong.cn:18081/1api/mdp/v2/purchaseOrder/500826031020576768?page=0&pageSize=7",
+        "url": "http://master.dev.kangyitong.cn:18081/api/mdp/v2/purchaseOrder/500826031020576768?page=0&pageSize=7",
         "method": "get"
       }
     ]
