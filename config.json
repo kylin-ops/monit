@@ -20,7 +20,7 @@
     "is_console": true
   },
   "http_detectors": {
-    "interval": 300,
+    "interval": 10,
     "failed_retry": 3,
     "alert_pre_hour": 3,
     "start_alert_time": "08:00:00",
@@ -29,11 +29,11 @@
       "url": "http://master.dev.kangyitong.cn:18081/uaa/oauth/token",
       "method": "get",
       "username": "10000000000",
-      "password": "e10adc3949ba59abbe56e057f20f883e",
+      "password": "e10adc3949ba59abbe56e057f20f883e"
     },
     "detectors": [
       {
-        "url": "http://master.dev.kangyitong.cn:18081/uaa/oauth/token",
+        "url": "http://master.dev.kangyitong.cn:18081/1api/mdp/v2/purchaseOrder/500826031020576768?page=0&pageSize=7",
         "method": "get"
       }
     ]

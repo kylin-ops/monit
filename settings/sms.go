@@ -25,7 +25,6 @@ func (s *AliyunSms) SendSms(smsContext string) error {
 	request.SignName = s.SignName
 	request.TemplateCode = s.TemplateCode
 	request.TemplateParam = fmt.Sprintf(`{"content": "%s"}`, smsContext)
-	request.Content = []byte("my sms")
 	_, err = client.SendSms(request)
 	return err
 }

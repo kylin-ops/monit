@@ -38,13 +38,13 @@ type Login struct {
 }
 
 type httpDetectors struct {
-	Interval       int       `json:"interval"`
-	FailedRetry    int       `json:"failed_retry"`
-	AlertPreHour   int       `json:"alert_pre_hour"`
-	StartAlertTime string    `json:"start_alert_time"`
-	EndAlertTime   string    `json:"end_alert_time"`
-	Login          Login     `json:"login"`
-	Detectors      Detectors `json:"detectors"`
+	Interval       int         `json:"interval"`
+	FailedRetry    int         `json:"failed_retry"`
+	AlertPreHour   int         `json:"alert_pre_hour"`
+	StartAlertTime string      `json:"start_alert_time"`
+	EndAlertTime   string      `json:"end_alert_time"`
+	Login          Login       `json:"login"`
+	Detectors      []Detectors `json:"detectors"`
 }
 
 type httpServer struct {
@@ -54,10 +54,10 @@ type httpServer struct {
 }
 
 type config struct {
-	HttpServer    httpServer       `json:"http_server"`
-	Logger        log              `json:"logger"`
-	AliyunSms     aliyunSms        `json:"aliyun_sms"`
-	HttpDetectors []*httpDetectors `json:"http_detectors"`
+	HttpServer    httpServer    `json:"http_server"`
+	Logger        log           `json:"logger"`
+	AliyunSms     aliyunSms     `json:"aliyun_sms"`
+	HttpDetectors httpDetectors `json:"http_detectors"`
 }
 
 func initConfig() *config {
